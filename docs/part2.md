@@ -120,4 +120,4 @@ In this section, you’ll generate the server’s WireGuard keys, create the mai
 ---
 
 ### **Conclusion**  
-Your WireGuard server is now properly configured. Next, move on to **[Part 3: Configuring Clients](./docs/part3.md)** to generate client keys, create client configuration files, and connect to the server.
+Your WireGuard server is now properly configured. Next, move on to **[Part 3: Configuring Clients](./part3.md)** to generate client keys, create client configuration files, and connect to the server.

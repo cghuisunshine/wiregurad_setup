@@ -58,7 +58,7 @@ You’ll install WireGuard on both the Linux server (where the VPN will be hoste
 
 9. **Launch the WireGuard Client** (All Platforms)  
    - Open the application (Linux: `wg-quick`, Windows: WireGuard GUI, macOS/iOS/Android: WireGuard app).  
-   - You’ll configure it later in [Part 3: Configuring Clients](./docs/part3.md).
+   - You’ll configure it later in [Part 3: Configuring Clients](./part3.md).
 
 10. **(Optional) Enable Automatic Updates** (Linux Server)  
    - Since security is crucial, consider enabling unattended upgrades or regularly run update checks:

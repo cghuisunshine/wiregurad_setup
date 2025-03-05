@@ -106,4 +106,4 @@ In this section, you’ll generate client keys, create the client configuration 
 ---
 
 ### **Conclusion**  
-Your client devices now have valid private/public keys, a corresponding configuration, and are ready to connect. In **[Part 4: Starting the VPN & Connecting](./docs/part4.md)**, you’ll finalize the setup by bringing up the VPN on both the server and clients and verifying traffic flow.
+Your client devices now have valid private/public keys, a corresponding configuration, and are ready to connect. In **[Part 4: Starting the VPN & Connecting](./part4.md)**, you’ll finalize the setup by bringing up the VPN on both the server and clients and verifying traffic flow.

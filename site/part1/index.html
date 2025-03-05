@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Part1 - My Docs</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../css/brands.min.css" rel="stylesheet">
+        <link href="../css/solid.min.css" rel="stylesheet">
+        <link href="../css/v4-font-face.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" >
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">My Docs</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="nav-item">
+                                <a href=".." class="nav-link">WireGuard Setup Guide</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="./" class="nav-link active" aria-current="page">Part1</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../part2/" class="nav-link">Part2</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../part3/" class="nav-link">Part3</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../part4/" class="nav-link">Part4</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ms-md-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href=".." class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../part2/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-bs-level="2"><a href="#part-1-installing-wireguard" class="nav-link">Part 1: Installing WireGuard</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h2 id="part-1-installing-wireguard">Part 1: Installing WireGuard</h2>
+<h3 id="overview"><strong>Overview</strong></h3>
+<p>You’ll install WireGuard on both the Linux server (where the VPN will be hosted) and any client devices (Windows, macOS, etc.). Follow these steps to ensure everything is set up correctly before moving on to configuration.</p>
+<hr />
+<h3 id="steps"><strong>Steps</strong></h3>
+<ol>
+<li><strong>Check Your Kernel Version</strong> (Linux Server)  </li>
+<li>WireGuard requires Linux kernel 5.6 or above, or backported modules on older distributions.<br />
+<code>bash
+   uname -r</code>  </li>
+<li>
+<p>If your distribution is older (e.g., Ubuntu 18.04), look up “WireGuard backports” to install the module.</p>
+</li>
+<li>
+<p><strong>Update &amp; Upgrade System Packages</strong> (Linux Server)  </p>
+</li>
+<li>
+<p>Ensure your package index and installed packages are up-to-date:<br />
+<code>bash
+   sudo apt update &amp;&amp; sudo apt upgrade -y</code>  </p>
+</li>
+<li>
+<p><strong>Install WireGuard</strong> (Linux Server)  </p>
+</li>
+<li>On Debian/Ubuntu:<br />
+<code>bash
+     sudo apt install wireguard -y</code>  </li>
+<li>
+<p>On CentOS/RHEL:<br />
+<code>bash
+     sudo yum install epel-release -y
+     sudo yum install kmod-wireguard wireguard-tools -y</code>  </p>
+</li>
+<li>
+<p><strong>Check for Required Tools</strong> (Linux Server)  </p>
+</li>
+<li>
+<p>Make sure the essential WireGuard tools (e.g., <code>wg</code> and <code>wg-quick</code>) are available:<br />
+<code>bash
+   which wg &amp;&amp; which wg-quick</code>  </p>
+</li>
+<li>
+<p><strong>Verify WireGuard Installation</strong> (Linux Server)  </p>
+</li>
+<li>Confirm the version:<br />
+<code>bash
+   wg --version</code>  </li>
+<li>
+<p>You should see a version number and build date.</p>
+</li>
+<li>
+<p><strong>Install WireGuard GUI or CLI</strong> (Windows)  </p>
+</li>
+<li>Download the installer from <a href="https://www.wireguard.com/install/">WireGuard.com</a> and run the <code>.exe</code> file.  </li>
+<li>
+<p>Follow on-screen prompts and click <strong>Install</strong>.</p>
+</li>
+<li>
+<p><strong>Install WireGuard App</strong> (macOS)  </p>
+</li>
+<li>Get the official WireGuard app from the <a href="https://apps.apple.com/us/app/wireguard/id1451685025">Mac App Store</a>.  </li>
+<li>
+<p>Drag the app to <strong>Applications</strong> if needed, then open it.</p>
+</li>
+<li>
+<p><strong>Install WireGuard Mobile Apps</strong> (iOS/Android)  </p>
+</li>
+<li>On iOS, search <strong>WireGuard</strong> in the App Store.  </li>
+<li>
+<p>On Android, install <strong>WireGuard</strong> from the Google Play Store.  </p>
+</li>
+<li>
+<p><strong>Launch the WireGuard Client</strong> (All Platforms)  </p>
+</li>
+<li>Open the application (Linux: <code>wg-quick</code>, Windows: WireGuard GUI, macOS/iOS/Android: WireGuard app).  </li>
+<li>
+<p>You’ll configure it later in <a href="../part3/">Part 3: Configuring Clients</a>.</p>
+</li>
+<li>
+<p><strong>(Optional) Enable Automatic Updates</strong> (Linux Server)  </p>
+</li>
+<li>Since security is crucial, consider enabling unattended upgrades or regularly run update checks:
+   <code>bash
+   sudo apt install unattended-upgrades
+   sudo dpkg-reconfigure unattended-upgrades</code></li>
+</ol>
+<p><img alt="Installation terminal screenshot" src="assets/install.png" title="WireGuard installation steps" /><br />
+<em>Alt-text: Terminal showing WireGuard installation commands.</em></p>
+<hr />
+<h3 id="conclusion"><strong>Conclusion</strong></h3>
+<p>WireGuard is now installed on your server and any client devices. In the next section, you’ll configure your Linux server with keys, network settings, and firewall rules to get your VPN fully operational.  </p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="../js/bootstrap.bundle.min.js"></script>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js"></script>
+        <script src="../search/main.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

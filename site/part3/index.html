@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Part3 - My Docs</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../css/brands.min.css" rel="stylesheet">
+        <link href="../css/solid.min.css" rel="stylesheet">
+        <link href="../css/v4-font-face.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" >
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">My Docs</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="nav-item">
+                                <a href=".." class="nav-link">WireGuard Setup Guide</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../part1/" class="nav-link">Part1</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../part2/" class="nav-link">Part2</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="./" class="nav-link active" aria-current="page">Part3</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../part4/" class="nav-link">Part4</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ms-md-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../part2/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../part4/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-bs-level="2"><a href="#part-3-configuring-clients" class="nav-link">Part 3: Configuring Clients</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h2 id="part-3-configuring-clients">Part 3: Configuring Clients</h2>
+<h3 id="overview"><strong>Overview</strong></h3>
+<p>In this section, you’ll generate client keys, create the client configuration file(s), and learn how to import them on various devices (Linux, Windows, macOS, iOS, Android). By the end, your client devices will be ready to securely connect to your WireGuard server.</p>
+<hr />
+<h3 id="steps"><strong>Steps</strong></h3>
+<ol>
+<li><strong>Decide on the Client IP Addressing Scheme</strong>  </li>
+<li>Each client (peer) needs a unique IP address in the VPN subnet (e.g., <code>10.8.0.x/24</code>).  </li>
+<li>
+<p>Plan out which IP addresses to assign if you have multiple clients (e.g., <code>10.8.0.2</code>, <code>10.8.0.3</code>, etc.).</p>
+</li>
+<li>
+<p><strong>Create a Separate Directory for Client Keys</strong> (Optional)  </p>
+</li>
+<li>
+<p>On the same server where you generated the server keys, keep client keys organized:<br />
+<code>bash
+     sudo mkdir -p /etc/wireguard/keys/clients
+     sudo chmod 700 /etc/wireguard/keys/clients
+     cd /etc/wireguard/keys/clients</code></p>
+</li>
+<li>
+<p><strong>Generate a New Client Private/Public Key Pair</strong>  </p>
+</li>
+<li>Use <code>wg genkey</code> just like you did for the server:<br />
+<code>bash
+     umask 077
+     wg genkey | tee client-private.key | wg pubkey &gt; client-public.key</code>  </li>
+<li>
+<p>This example shows how to create just one client; repeat for each additional client, using unique filenames (e.g., <code>client1-private.key</code>, <code>client1-public.key</code>).</p>
+</li>
+<li>
+<p><strong>Back Up Your Client Keys</strong> (Optional but Recommended)  </p>
+</li>
+<li>Keys can be regenerated, but it’s often convenient to keep them in a secure backup location.  </li>
+<li>
+<p>For example, copy them to an encrypted USB drive.</p>
+</li>
+<li>
+<p><strong>Add the Client to the Server Configuration</strong>  </p>
+</li>
+<li>Open your server config (<code>/etc/wireguard/wg0.conf</code>) and append a new <code>[Peer]</code> section:<br />
+<code>ini
+     [Peer]
+     PublicKey = &lt;client-public-key&gt;
+     AllowedIPs = 10.8.0.2/32</code>  </li>
+<li>Replace <code>10.8.0.2/32</code> with the IP you plan to assign to this client.  </li>
+<li>
+<p>Save and exit, then apply the changes:<br />
+<code>bash
+     sudo wg-quick down wg0 &amp;&amp; sudo wg-quick up wg0</code></p>
+</li>
+<li>
+<p><strong>Create the Client Configuration File</strong> (<code>client.conf</code>)  </p>
+</li>
+<li>
+<p>On the server or on your local machine, create a file named <code>client.conf</code> (use a text editor):<br />
+     ```ini
+     [Interface]
+     Address = 10.8.0.2/24
+     PrivateKey = <client-private-key>
+     DNS = 1.1.1.1        # (Optional) Provide a DNS server</p>
+<p>[Peer]
+ PublicKey = <server-public-key>
+ Endpoint = <server-ip-or-domain>:51820
+ AllowedIPs = 0.0.0.0/0
+ PersistentKeepalive = 25
+ <code>``
+   - Replace</code><client-private-key><code>with the contents of</code>client-private.key<code>.  
+   - Replace</code><server-public-key><code>with the contents of your</code>server-public.key<code>.  
+   - Replace</code><server-ip-or-domain>` with your server’s public IP or domain.</p>
+</li>
+<li>
+<p><strong>(Optional) Generate a QR Code for Mobile Apps</strong>  </p>
+</li>
+<li>For easier import on mobile devices, install <code>qrencode</code> on your Linux machine:
+     <code>bash
+     sudo apt install qrencode -y</code>  </li>
+<li>Convert <code>client.conf</code> into a QR code:<br />
+<code>bash
+     qrencode -t ansiutf8 &lt; client.conf</code>  </li>
+<li>
+<p>For iOS or Android WireGuard app, tap <strong>Scan from QR Code</strong> and point your camera at the generated code.</p>
+</li>
+<li>
+<p><strong>Import the Client Configuration on Windows/macOS</strong>  </p>
+</li>
+<li><strong>Windows</strong>:  <ol>
+<li>Download the <code>.conf</code> file onto your Windows system.  </li>
+<li>Open the WireGuard app and click <strong>Import tunnel(s)</strong>.  </li>
+<li>Select your <code>client.conf</code> file.  </li>
+</ol>
+</li>
+<li>
+<p><strong>macOS</strong>:  </p>
+<ol>
+<li>Download the <code>.conf</code> file.  </li>
+<li>In the WireGuard app, click <strong>Import tunnel(s) from file</strong> and select <code>client.conf</code>.</li>
+</ol>
+</li>
+<li>
+<p><strong>Import the Client Configuration on Linux</strong>  </p>
+</li>
+<li>If using <code>wg-quick</code>:<br />
+<code>bash
+     sudo cp client.conf /etc/wireguard/
+     sudo wg-quick up /etc/wireguard/client.conf</code>  </li>
+<li>
+<p>Adjust file paths based on your distro’s setup. You can also rename <code>client.conf</code> to something like <code>wg-client.conf</code> if desired.</p>
+</li>
+<li>
+<p><strong>Test the Connection</strong>  </p>
+</li>
+<li>From the client device, activate the WireGuard tunnel.  </li>
+<li>Verify your new VPN IP address:  <ul>
+<li>On Linux, run <code>ip addr show</code> and look for <code>10.8.0.x</code>.  </li>
+<li>On Windows/macOS, the WireGuard UI usually shows “Connected” or “Active.”  </li>
+</ul>
+</li>
+<li>Check if you can reach the server (e.g., <code>ping 10.8.0.1</code>). If you allowed full internet routing (<code>AllowedIPs = 0.0.0.0/0</code>), verify with an IP-checking service that your public IP matches the server’s.</li>
+</ol>
+<blockquote>
+<p>[!CAUTION]<br />
+Replace <code>&lt;server-ip-or-domain&gt;</code> with your server’s actual public IP or a resolvable domain. Using an incorrect address will prevent the client from connecting.</p>
+</blockquote>
+<p><img alt="Client config file screenshot" src="assets/client-config.png" title="Client configuration example" /><br />
+<em>Alt-text: Example WireGuard client configuration file.</em></p>
+<hr />
+<h3 id="conclusion"><strong>Conclusion</strong></h3>
+<p>Your client devices now have valid private/public keys, a corresponding configuration, and are ready to connect. In <strong><a href="../part4/">Part 4: Starting the VPN &amp; Connecting</a></strong>, you’ll finalize the setup by bringing up the VPN on both the server and clients and verifying traffic flow.</p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="../js/bootstrap.bundle.min.js"></script>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js"></script>
+        <script src="../search/main.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

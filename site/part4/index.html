@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Part4 - My Docs</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../css/brands.min.css" rel="stylesheet">
+        <link href="../css/solid.min.css" rel="stylesheet">
+        <link href="../css/v4-font-face.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" >
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">My Docs</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="nav-item">
+                                <a href=".." class="nav-link">WireGuard Setup Guide</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../part1/" class="nav-link">Part1</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../part2/" class="nav-link">Part2</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../part3/" class="nav-link">Part3</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="./" class="nav-link active" aria-current="page">Part4</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ms-md-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../part3/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" class="nav-link disabled">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-bs-level="2"><a href="#part-4-starting-the-vpn-connecting" class="nav-link">Part 4: Starting the VPN &amp; Connecting</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h2 id="part-4-starting-the-vpn-connecting">Part 4: Starting the VPN &amp; Connecting</h2>
+<h3 id="overview"><strong>Overview</strong></h3>
+<p>In this section, you’ll learn how to bring up the VPN interface on the server, enable any required network settings (like IP forwarding), and connect from your client devices. Once complete, your WireGuard VPN will be fully operational and ready for secure remote access.</p>
+<hr />
+<h3 id="steps"><strong>Steps</strong></h3>
+<ol>
+<li><strong>Double-Check the Server Configuration</strong>  </li>
+<li>Ensure your <code>/etc/wireguard/wg0.conf</code> has the correct <strong>PrivateKey</strong>, <strong>Address</strong>, <strong>ListenPort</strong>, and [Peer] blocks for each client.  </li>
+<li>
+<p>Verify your firewall settings allow UDP traffic on port <code>51820</code>.</p>
+</li>
+<li>
+<p><strong>Start WireGuard on the Server</strong>  </p>
+</li>
+<li>Use the wg-quick script to bring up your WireGuard interface:
+     <code>bash
+     sudo wg-quick up wg0</code>  </li>
+<li>
+<p>This reads from <code>/etc/wireguard/wg0.conf</code> and starts the VPN interface.</p>
+</li>
+<li>
+<p><strong>Enable WireGuard to Launch at Boot</strong>  </p>
+</li>
+<li>
+<p>To ensure the VPN interface automatically starts after a reboot:<br />
+<code>bash
+     sudo systemctl enable wg-quick@wg0</code></p>
+</li>
+<li>
+<p><strong>Enable IP Forwarding on the Server</strong>  </p>
+</li>
+<li>If you haven’t already done so in previous steps:
+     <code>bash
+     echo "net.ipv4.ip_forward=1" | sudo tee -a /etc/sysctl.conf
+     sudo sysctl -p</code>  </li>
+<li>
+<p>This allows your server to route traffic between the VPN interface and the internet/local network.</p>
+</li>
+<li>
+<p><strong>Verify the Server Interface and Peers</strong>  </p>
+</li>
+<li>Run <code>sudo wg</code> to see the status of your WireGuard interface.  </li>
+<li>
+<p>Confirm the interface <code>wg0</code> is up and that your clients’ public keys are listed under <strong>Peers</strong>.</p>
+</li>
+<li>
+<p><strong>Connect Desktop Clients</strong>  </p>
+</li>
+<li><strong>Windows</strong> or <strong>macOS</strong>:  <ol>
+<li>Open the WireGuard application.  </li>
+<li>Click <strong>Import tunnel</strong> and select your <code>client.conf</code>.  </li>
+<li>Flip the switch to <strong>Activate</strong> or <strong>Connect</strong>.  </li>
+</ol>
+</li>
+<li>
+<p><strong>Linux</strong> (using wg-quick):<br />
+<code>bash
+     sudo wg-quick up /path/to/client.conf</code></p>
+</li>
+<li>
+<p><strong>Connect Mobile Clients</strong>  </p>
+</li>
+<li>
+<p><strong>iOS/Android</strong>:  </p>
+<ol>
+<li>Install the WireGuard app from the App Store (iOS) or Play Store (Android).  </li>
+<li>Tap <strong>+</strong> (add) → <strong>Scan from QR Code</strong>.  </li>
+<li>Scan the QR code generated from your <code>client.conf</code>.  </li>
+<li>Tap <strong>Activate</strong> or <strong>Connect</strong>.</li>
+</ol>
+</li>
+<li>
+<p><strong>Test Connectivity</strong>  </p>
+</li>
+<li>From a connected client, ping the server’s VPN IP (e.g., <code>ping 10.8.0.1</code>).  </li>
+<li>If you see replies, your VPN tunnel is working.  </li>
+<li>
+<p>Optionally, try accessing resources on your local network or the internet to confirm routing is correct.</p>
+</li>
+<li>
+<p><strong>Check Logs for Troubleshooting</strong> (if needed)  </p>
+</li>
+<li><strong>Server</strong>:<br />
+<code>bash
+     journalctl -u wg-quick@wg0</code>
+     or
+     <code>bash
+     sudo wg</code></li>
+<li>
+<p><strong>Clients</strong>:  </p>
+<ul>
+<li>In the WireGuard desktop/mobile app, check the log or status panel for any error messages (e.g., “Handshake did not complete”).</li>
+</ul>
+</li>
+<li>
+<p><strong>(Optional) Customize Traffic Rules and NAT</strong>  </p>
+</li>
+<li>If your VPN requires full internet routing (<code>AllowedIPs = 0.0.0.0/0</code>), ensure NAT is configured properly on the server (e.g., using iptables or firewalld).  </li>
+<li>For example, on Ubuntu with iptables:<br />
+<code>bash
+     sudo iptables -t nat -A POSTROUTING -o eth0 -j MASQUERADE</code>
+     Replace <code>eth0</code> with the interface connected to the internet.</li>
+</ol>
+<p><img alt="WireGuard GUI screenshot" src="assets/gui.png" title="WireGuard client interface" /><br />
+<em>Alt-text: WireGuard desktop app with an active tunnel.</em></p>
+<hr />
+<h3 id="conclusion"><strong>Conclusion</strong></h3>
+<p>Your WireGuard VPN is now active and clients can securely connect. Test further by checking local network resources and external internet access to confirm everything is routing correctly. If you run into issues, consult the logs or revisit your server and client configurations for typos or missing settings.  </p></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="../js/bootstrap.bundle.min.js"></script>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js"></script>
+        <script src="../search/main.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

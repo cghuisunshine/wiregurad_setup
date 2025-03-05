@@ -1,6 +1,6 @@
 # WireGuard Setup Guide  
 
-![WireGuard Logo](assets/wireguard-logo.png)  
+![WireGuard Logo](./assets/wiregurad-logo.svg)  
 
 **A beginner-friendly guide to setting up a secure WireGuard VPN.**  
 

@@ -1,76 +1,68 @@
-## Part 1: Installing WireGuard
+# Part 1: Getting Started
 
-### **Overview**  
-You’ll install WireGuard on both the Linux server (where the VPN will be hosted) and any client devices (Windows, macOS, etc.). Follow these steps to ensure everything is set up correctly before moving on to configuration.
+Before configuring a WireGuard VPN, you’ll need:
 
----
+1. **A Linux server** (where you’ll host WireGuard).  
+2. **At least one client device** (Windows, macOS, iOS, Android, or another Linux machine) to connect to that server.
 
-### **Steps**  
-
-1. **Check Your Kernel Version** (Linux Server)  
-   - WireGuard requires Linux kernel 5.6 or above, or backported modules on older distributions.  
-   ```bash
-   uname -r
-   ```  
-   - If your distribution is older (e.g., Ubuntu 18.04), look up “WireGuard backports” to install the module.
-
-2. **Update & Upgrade System Packages** (Linux Server)  
-   - Ensure your package index and installed packages are up-to-date:  
-   ```bash
-   sudo apt update && sudo apt upgrade -y
-   ```  
-
-3. **Install WireGuard** (Linux Server)  
-   - On Debian/Ubuntu:  
-     ```bash
-     sudo apt install wireguard -y
-     ```  
-   - On CentOS/RHEL:  
-     ```bash
-     sudo yum install epel-release -y
-     sudo yum install kmod-wireguard wireguard-tools -y
-     ```  
-
-4. **Check for Required Tools** (Linux Server)  
-   - Make sure the essential WireGuard tools (e.g., `wg` and `wg-quick`) are available:  
-   ```bash
-   which wg && which wg-quick
-   ```  
-
-5. **Verify WireGuard Installation** (Linux Server)  
-   - Confirm the version:  
-   ```bash
-   wg --version
-   ```  
-   - You should see a version number and build date.
-
-6. **Install WireGuard GUI or CLI** (Windows)  
-   - Download the installer from [WireGuard.com](https://www.wireguard.com/install/) and run the `.exe` file.  
-   - Follow on-screen prompts and click **Install**.
-
-7. **Install WireGuard App** (macOS)  
-   - Get the official WireGuard app from the [Mac App Store](https://apps.apple.com/us/app/wireguard/id1451685025).  
-   - Drag the app to **Applications** if needed, then open it.
-
-8. **Install WireGuard Mobile Apps** (iOS/Android)  
-   - On iOS, search **WireGuard** in the App Store.  
-   - On Android, install **WireGuard** from the Google Play Store.  
-
-9. **Launch the WireGuard Client** (All Platforms)  
-   - Open the application (Linux: `wg-quick`, Windows: WireGuard GUI, macOS/iOS/Android: WireGuard app).  
-   - You’ll configure it later in [Part 3: Configuring Clients](./part3.md).
-
-10. **(Optional) Enable Automatic Updates** (Linux Server)  
-   - Since security is crucial, consider enabling unattended upgrades or regularly run update checks:
-   ```bash
-   sudo apt install unattended-upgrades
-   sudo dpkg-reconfigure unattended-upgrades
-   ```
-
-![Installation terminal screenshot](assets/install.png "WireGuard installation steps")  
-*Alt-text: Terminal showing WireGuard installation commands.*
+This part ensures you have **WireGuard** readily available on both the server and the client device(s). If you need detailed installation instructions, refer to the [WireGuard Official Documentation](https://www.wireguard.com/install/) or your OS’s support resources.
 
 ---
 
-### **Conclusion**  
-WireGuard is now installed on your server and any client devices. In the next section, you’ll configure your Linux server with keys, network settings, and firewall rules to get your VPN fully operational.  
+## 1. Linux Server
+
+- **Confirm You Have WireGuard**  
+  - Check if WireGuard is in your distribution’s repositories.  
+  - If you’re not sure, consult your distro’s documentation or the [official WireGuard site](https://www.wireguard.com/install/).  
+- **Validate Tools**  
+  - After installation (or if already installed), ensure you can run `wg` or `wg-quick` in a terminal.
+
+No step-by-step install is provided here, but you must be **able** to install or verify that WireGuard is present on your server.
+
+---
+
+## 2. Windows Client
+
+- **Download the WireGuard Client**  
+  - Get the official Windows installer from [WireGuard.com](https://www.wireguard.com/install/).  
+- **Open & Verify**  
+  - After installing, launch the **WireGuard** program to ensure it starts without errors.  
+  - You may see a prompt to import or create a tunnel configuration—wait until later parts of this guide.
+
+If you encounter any issues, check the [WireGuard for Windows documentation](https://www.wireguard.com/install/) or your system’s help resources.
+
+---
+
+## 3. macOS Client
+
+- **Obtain WireGuard from the Mac App Store**  
+  - Search “WireGuard” in the App Store (or use [this link](https://apps.apple.com/us/app/wireguard/id1451685025)) and click **Get**.  
+- **Launch & Confirm**  
+  - After installation, open the **WireGuard** app.  
+  - It should show an initial empty list of tunnels.
+
+Again, detailed steps (like Apple ID logins) are outside this guide’s scope. Refer to [Apple Support](https://support.apple.com) if needed.
+
+---
+
+## 4. iOS & Android Clients
+
+- **Install WireGuard Mobile**  
+  - **iOS**: Find “WireGuard” in the iOS App Store.  
+  - **Android**: Find “WireGuard” in Google Play.  
+- **Launch the App**  
+  - Ensure the app runs and can create or import a tunnel later.
+
+For troubleshooting or permissions issues, see [WireGuard on iOS/Android](https://www.wireguard.com/install/) or your phone’s support documentation.
+
+---
+
+## 5. Next Steps
+
+With WireGuard **available** on:
+- **Linux server** (ready to act as the VPN host), and  
+- **Client devices** (ready to connect),
+
+you can now proceed to **Part 2**, where you’ll set up the server’s WireGuard configuration (keys, interface settings, and firewall rules). Later, in **Part 3**, you’ll create and import client configurations to connect securely to the server.
+
+> **Note**: If you still need to **install** WireGuard on any platform, please consult the official installation instructions or your OS’s package manager documentation before proceeding.

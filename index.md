@@ -3,6 +3,30 @@
 ## Introduction
 **WireGuard** is a lightweight, high-performance VPN that uses modern cryptography to secure internet traffic. This guide walks beginners through setting up a WireGuard VPN server and connecting clients (e.g., laptops, phones).
 
+---
+
+### Disclaimer
+You must have a **Linux server** (e.g., Ubuntu, Debian, Fedora, etc.) with **root or sudo privileges**.  
+You also need a separate **client device** (such as Windows, macOS, iOS, Android, or another Linux machine) to connect to the VPN.  
+If you do **not** have both a Linux server and a separate client device, this guide will **not** apply to your setup.
+
+---
+
+### What is a VPN?
+A **VPN** (Virtual Private Network) encrypts your internet traffic and routes it through a secure tunnel. This hides your IP address and protects your data from potential eavesdroppers on insecure networks (such as public Wi-Fi). It can also let you securely access remote services or devices as if they were on your local network.
+
+**WireGuard** is a modern VPN protocol known for its simplicity, speed, and robust cryptography. Compared to older protocols like OpenVPN or IPSec, WireGuard is lighter, easier to configure, and often faster.
+
+---
+
+### Who Is This Guide For?
+- **Skill Level**: This tutorial is aimed at **beginners** or those with **basic** Linux command-line experience.  
+- **Requirements**:
+  - A Linux server with a public IP address (or proper port forwarding configured).
+  - A client device (Windows, macOS, iOS, Android, or Linux) to connect to the VPN.
+  - Familiarity with text editors (e.g., `nano`, `vim`) and basic command-line usage.
+
+
 ### Intended Use
 - Securely access home/office networks remotely.  
 - Encrypt public Wi-Fi traffic.  

@@ -1,109 +1,273 @@
-## Part 3: Configuring Clients
+# Part 3: Configuring Clients
 
-### **Overview**  
-In this section, you’ll generate client keys, create the client configuration file(s), and learn how to import them on various devices (Linux, Windows, macOS, iOS, Android). By the end, your client devices will be ready to securely connect to your WireGuard server.
+When you look at the WireGuard interface on a fresh install, you’ll often see an empty “Tunnels” list or a simple log window. **This guide shows you how** to create a client configuration so you can connect to your WireGuard server.
 
----
-
-### **Steps**
-
-1. **Decide on the Client IP Addressing Scheme**  
-   - Each client (peer) needs a unique IP address in the VPN subnet (e.g., `10.8.0.x/24`).  
-   - Plan out which IP addresses to assign if you have multiple clients (e.g., `10.8.0.2`, `10.8.0.3`, etc.).
-
-2. **Create a Separate Directory for Client Keys** (Optional)  
-   - On the same server where you generated the server keys, keep client keys organized:  
-     ```bash
-     sudo mkdir -p /etc/wireguard/keys/clients
-     sudo chmod 700 /etc/wireguard/keys/clients
-     cd /etc/wireguard/keys/clients
-     ```
-
-3. **Generate a New Client Private/Public Key Pair**  
-   - Use `wg genkey` just like you did for the server:  
-     ```bash
-     umask 077
-     wg genkey | tee client-private.key | wg pubkey > client-public.key
-     ```  
-   - This example shows how to create just one client; repeat for each additional client, using unique filenames (e.g., `client1-private.key`, `client1-public.key`).
-
-4. **Back Up Your Client Keys** (Optional but Recommended)  
-   - Keys can be regenerated, but it’s often convenient to keep them in a secure backup location.  
-   - For example, copy them to an encrypted USB drive.
-
-5. **Add the Client to the Server Configuration**  
-   - Open your server config (`/etc/wireguard/wg0.conf`) and append a new `[Peer]` section:  
-     ```ini
-     [Peer]
-     PublicKey = <client-public-key>
-     AllowedIPs = 10.8.0.2/32
-     ```  
-   - Replace `10.8.0.2/32` with the IP you plan to assign to this client.  
-   - Save and exit, then apply the changes:  
-     ```bash
-     sudo wg-quick down wg0 && sudo wg-quick up wg0
-     ```
-
-6. **Create the Client Configuration File** (`client.conf`)  
-   - On the server or on your local machine, create a file named `client.conf` (use a text editor):  
-     ```ini
-     [Interface]
-     Address = 10.8.0.2/24
-     PrivateKey = <client-private-key>
-     DNS = 1.1.1.1        # (Optional) Provide a DNS server
-
-     [Peer]
-     PublicKey = <server-public-key>
-     Endpoint = <server-ip-or-domain>:51820
-     AllowedIPs = 0.0.0.0/0
-     PersistentKeepalive = 25
-     ```
-   - Replace `<client-private-key>` with the contents of `client-private.key`.  
-   - Replace `<server-public-key>` with the contents of your `server-public.key`.  
-   - Replace `<server-ip-or-domain>` with your server’s public IP or domain.
-
-7. **(Optional) Generate a QR Code for Mobile Apps**  
-   - For easier import on mobile devices, install `qrencode` on your Linux machine:
-     ```bash
-     sudo apt install qrencode -y
-     ```  
-   - Convert `client.conf` into a QR code:  
-     ```bash
-     qrencode -t ansiutf8 < client.conf
-     ```  
-   - For iOS or Android WireGuard app, tap **Scan from QR Code** and point your camera at the generated code.
-
-8. **Import the Client Configuration on Windows/macOS**  
-   - **Windows**:  
-     1. Download the `.conf` file onto your Windows system.  
-     2. Open the WireGuard app and click **Import tunnel(s)**.  
-     3. Select your `client.conf` file.  
-   - **macOS**:  
-     1. Download the `.conf` file.  
-     2. In the WireGuard app, click **Import tunnel(s) from file** and select `client.conf`.
-
-9. **Import the Client Configuration on Linux**  
-   - If using `wg-quick`:  
-     ```bash
-     sudo cp client.conf /etc/wireguard/
-     sudo wg-quick up /etc/wireguard/client.conf
-     ```  
-   - Adjust file paths based on your distro’s setup. You can also rename `client.conf` to something like `wg-client.conf` if desired.
-
-10. **Test the Connection**  
-   - From the client device, activate the WireGuard tunnel.  
-   - Verify your new VPN IP address:  
-     - On Linux, run `ip addr show` and look for `10.8.0.x`.  
-     - On Windows/macOS, the WireGuard UI usually shows “Connected” or “Active.”  
-   - Check if you can reach the server (e.g., `ping 10.8.0.1`). If you allowed full internet routing (`AllowedIPs = 0.0.0.0/0`), verify with an IP-checking service that your public IP matches the server’s.
-
-> [!CAUTION]  
-> Replace `<server-ip-or-domain>` with your server’s actual public IP or a resolvable domain. Using an incorrect address will prevent the client from connecting.
-
-![Client config file screenshot](assets/client-config.png "Client configuration example")  
-*Alt-text: Example WireGuard client configuration file.*
+Below are **13 steps** that explain **what** you’re doing and **why** each step is necessary. We’ll also cover how to export or “download” the client configuration (`.conf` file) so you can use it on Windows, macOS, Linux, iOS, or Android.
 
 ---
 
-### **Conclusion**  
-Your client devices now have valid private/public keys, a corresponding configuration, and are ready to connect. In **[Part 4: Starting the VPN & Connecting](./part4.md)**, you’ll finalize the setup by bringing up the VPN on both the server and clients and verifying traffic flow.
+## Step 1: Plan Your Client IP Addresses
+
+```text
+Pick a private IP range for your WireGuard network, e.g., 10.8.0.0/24.
+Server’s IP might be 10.8.0.1/24.
+Clients get 10.8.0.2/24, 10.8.0.3/24, etc.
+```
+
+### Why This Step?
+Each client needs a **unique IP** in the same subnet as the server’s VPN interface. For example, if the server is `10.8.0.1/24`, the first client can be `10.8.0.2/24`, the second can be `10.8.0.3/24`, etc.
+
+---
+
+## Step 2: Generate the Client Key Pair
+
+On your **Linux server** (or wherever you keep keys):
+
+```bash
+sudo mkdir -p /etc/wireguard/keys/clients
+sudo chmod 700 /etc/wireguard/keys/clients
+cd /etc/wireguard/keys/clients
+
+umask 077
+wg genkey | tee client1-private.key | wg pubkey > client1-public.key
+```
+
+### Why This Step?
+WireGuard uses a **public–private key pair**. The **private key** stays on the client. The **public key** is added to the server’s configuration so the server recognizes and trusts this client.
+
+---
+
+## Step 3: Add the Client’s Public Key to the Server
+
+Open your server configuration file, e.g. `/etc/wireguard/wg0.conf`, and **append** a new `[Peer]` section:
+
+```ini
+[Peer]
+# Client 1
+PublicKey = <contents-of-client1-public.key>
+AllowedIPs = 10.8.0.2/32
+```
+
+Then **restart** or **update** your WireGuard interface:
+
+```bash
+sudo wg-quick down wg0 && sudo wg-quick up wg0
+```
+*(Or run `sudo wg set wg0 peer <client1-public-key> allowed-ips 10.8.0.2/32` for a live update.)*
+
+### Why This Step?
+The server needs to know which public key belongs to which client, and what IP to assign them (`10.8.0.2/32`). If you don’t add a `[Peer]` entry for the client, the server won’t accept its connections.
+
+---
+
+## Step 4: Create the Client Configuration File
+
+Create a `client1.conf` (or any name you like) on **your server** or local machine:
+
+```ini
+[Interface]
+# Client's VPN IP
+Address = 10.8.0.2/24
+
+# Client's private key (from client1-private.key)
+PrivateKey = <contents-of-client1-private.key>
+
+# (Optional) DNS server to use
+DNS = 1.1.1.1
+
+[Peer]
+# Server's public key
+PublicKey = <contents-of-server-public.key>
+
+# Server's IP or domain, plus port
+Endpoint = <server-ip-or-domain>:51820
+
+# Route all traffic through VPN
+AllowedIPs = 0.0.0.0/0
+
+# Keeps NAT mappings alive
+PersistentKeepalive = 25
+```
+
+### Why This Step?
+Each client needs its own `.conf` file specifying:
+- **Its own IP address** (`Address`).
+- **Its private key** (`PrivateKey`).
+- **Where to connect** (`Endpoint`) and **which server key** to trust (`PublicKey`).
+
+---
+
+## Step 5: Understand How to Pick the Right IP
+
+If your server is at `10.8.0.1/24`, then:
+- First client: `Address = 10.8.0.2/24`
+- Second client: `Address = 10.8.0.3/24`
+- Third client: `Address = 10.8.0.4/24`
+  
+Just make sure each client has a **different** IP in that range.
+
+### Why This Step?
+No two clients can share the same IP address. You’re essentially building a small virtual LAN (10.8.0.x).
+
+---
+
+## Step 6: Export (Download) the Client Config File
+
+If you created `client1.conf` **on the server**, you need to get it onto the **client machine** (Windows, macOS, etc.):
+
+1. **SCP (Linux/Mac)**:
+   ```bash
+   scp username@yourserver.com:/etc/wireguard/keys/clients/client1.conf .
+   ```
+2. **SFTP (Windows or Linux)**:
+   - Open an SFTP client (like WinSCP, FileZilla).
+   - Connect to your server.
+   - Navigate to `/etc/wireguard/keys/clients/`.
+   - **Download** `client1.conf` to your local machine.
+3. **Email or Cloud Transfer**:
+   - (Less secure) You could email yourself `client1.conf` or use a cloud drive—be mindful of security.
+
+### Why This Step?
+Your **client device** needs a local copy of `client1.conf` so it can import or load the config.
+
+---
+
+## Step 7: Import on Windows
+
+1. **Launch WireGuard** on Windows.
+2. Click **Import Tunnel(s)** (or `Add Tunnel > Import from file`).
+3. Browse to `client1.conf` and click **Open**.
+4. You should see a new tunnel in the list, typically named after the file.
+
+### Why This Step?
+Windows WireGuard expects a `.conf` file. Once imported, you can toggle the tunnel “on” to connect.
+
+---
+
+## Step 8: Import on macOS
+
+1. **Open WireGuard** from your Applications folder.
+2. Click the **+** button or “Import tunnel(s) from file.”
+3. Select `client1.conf`.
+4. A new tunnel appears in the list—toggle it to **Activate**.
+
+### Why This Step?
+macOS works similarly to Windows: you import the config file to create a new WireGuard tunnel.
+
+---
+
+## Step 9: Import on Linux (Client)
+
+If you’re using Linux as a client:
+
+```bash
+# Place the config in /etc/wireguard/ (optional location)
+sudo cp client1.conf /etc/wireguard/
+
+# Bring up the tunnel
+sudo wg-quick up /etc/wireguard/client1.conf
+```
+
+Check with:
+```bash
+ip addr show wg-client1
+# or
+sudo wg
+```
+
+### Why This Step?
+Linux uses `wg-quick` to bring the VPN interface up or down. You can store `.conf` files in `/etc/wireguard/` for consistency.
+
+---
+
+## Step 10: Optional – Generate a QR Code for Mobile
+
+If you have **iOS** or **Android**:
+
+```bash
+sudo apt-get install qrencode
+cd /etc/wireguard/keys/clients
+qrencode -t ansiutf8 < client1.conf
+```
+Then in the WireGuard mobile app:
+1. Tap **Add**.
+2. Choose **Scan from QR Code**.
+3. Point your camera at the terminal output.
+
+### Why This Step?
+Scanning a QR code is often easier than manually transferring a `.conf` file to your phone.
+
+---
+
+## Step 11: Start (Activate) the Tunnel
+
+- **Windows/macOS**: Toggle the tunnel to **ON** or **Activate**.
+- **Linux**: `sudo wg-quick up /etc/wireguard/client1.conf`
+- **iOS/Android**: Tap the “Activate” or “Connect” slider.
+
+### Why This Step?
+This is how you **actually connect** the client to the server via the WireGuard VPN.
+
+---
+
+## Step 12: Verify Connectivity
+
+1. **Ping the Server**:
+   ```bash
+   ping 10.8.0.1 -c 3
+   ```
+2. **Check IP** (if routing all traffic):
+   - Visit an IP-checker site. It should show your **server’s** public IP if the tunnel is up.
+3. **View “latest handshake”** on the server:
+   ```bash
+   sudo wg
+   ```
+   You should see something like:
+   ```
+   peer: <client1-public-key>
+     endpoint: <client's IP>:<port>
+     latest handshake: <recent timestamp>
+   ```
+
+### Why This Step?
+Ensures your client can reach the server (`10.8.0.1`), and that traffic is flowing through the VPN.
+
+---
+
+## Step 13: Check Logs or Update On-The-Fly
+
+- **View logs**:
+  ```bash
+  sudo journalctl -u wg-quick@wg0
+  ```
+  (Adjust if your system uses a different service name.)
+- **Update peer config** without restarting:
+  ```bash
+  sudo wg set wg0 peer <client1-public-key> allowed-ips 10.8.0.2/32
+  ```
+- **Disconnect** the client:
+  ```bash
+  sudo wg-quick down /etc/wireguard/client1.conf
+  ```
+
+### Why This Step?
+- **Logs** help troubleshoot connection issues.  
+- **On-the-fly updates** let you add or remove peers without fully restarting the VPN.  
+- **Disconnect** safely closes the tunnel on the client side.
+
+---
+
+
+
+## Conclusion
+
+By following these **13 steps**, you’ve:
+
+1. Decided which IP address each client will use.  
+2. Generated a unique key pair for every client.  
+3. Added each client’s public key to the server config.  
+4. Created and **exported** a `.conf` file for easy import on the client device.  
+5. Activated the tunnel on your client.  
+6. Verified everything is working.
+
+**Next**: You can add more clients simply by repeating these steps (using a different `.conf` for each one). If everything’s working, you now have a fully functional WireGuard VPN setup!

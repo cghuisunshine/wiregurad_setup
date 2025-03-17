@@ -83,6 +83,7 @@ A **VPN** (Virtual Private Network) encrypts your internet traffic and routes it
 ---
 
 ## Troubleshooting Guide
+
 | Issue                   | Solution                                              |
 |-------------------------|-------------------------------------------------------|
 | **Connection fails**    | Open UDP port `51820` on the server firewall.         |

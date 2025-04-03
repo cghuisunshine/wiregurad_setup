@@ -1,1 +1,71 @@
-site_name: My Docs
+site_name: Getting Started with WireGuard VPN
+site_url: "https://cghuisunshine.github.io/wiregurad_setup/"
+repo_url: "ttps://github.com/cghuisunshine/wiregurad_setup.git"
+theme:
+  name: material
+  font:
+    text: Merriweather Sans
+    code: Red Hat Mono
+  icon:
+    logo: fontawesome/solid/code-branch
+  favicon: assets/images/code-branch-solid.svg
+  features:
+    - navigation.footer
+    - content.code.copy
+  palette:
+    # Dark Mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/weather-sunny
+        name: Dark mode
+      primary: deep purple
+      accent: yellow
+
+    # Light Mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/weather-night
+        name: Light mode
+      primary: deep orange
+      accent: blue
+# nav:
+#   - Home: index.md
+#   - Introduction to Git: set-1-intro-git.md
+#   - Installation:
+#       - Windows: set-2a-windows.md
+#       - macOS: set-2b-macOS.md
+#       - Linux: set-2c-linux.md
+#   - Basic Git Commands: set-3-basic-git-commands.md
+#   - Introduction to GitHub: set-4-intro-github.md
+#   - GitHub Setup: set-5-basic-github.md
+#   - Troubleshooting: troubleshooting.md
+#   - Glossary: glossary.md
+
+markdown_extensions:
+  - attr_list
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - admonition
+  - pymdownx.details
+  - tables
+
+extra_css:
+  - assets/style.css
+
+copyright: Copyright &copy; - 2025 Peter Chen & Ryan Bow

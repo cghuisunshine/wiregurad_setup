@@ -1,6 +1,6 @@
 site_name: Getting Started with WireGuard VPN
-site_url: "https://cghuisunshine.github.io/wiregurad_setup/"
-repo_url: "https://github.com/cghuisunshine/wiregurad_setup.git"
+site_url: "https://cghuisunshine.github.io/wireguard_setup/"
+repo_url: "https://github.com/cghuisunshine/wireguard_setup.git"
 theme:
   name: material
   font:

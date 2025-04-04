@@ -90,6 +90,12 @@ PersistentKeepalive = 25
 ```
 ![client_configuration_file](assets/images/client_configuration_file.png)
 
+
+!!! example "Example"
+
+    Above screenshot shows an example of client configuration file.
+
+
 ### Why This Step?
 Each client needs its own `.conf` file specifying:
 - **Its own IP address** (`Address`).
@@ -120,6 +126,12 @@ If you created `client1.conf` **on the server**, you need to get it onto the **c
    ```bash
    scp username@yourserver.com:/etc/wireguard/keys/clients/client1.conf .
    ```
+   ![download_client_configuration](assets/images/download_client_configuration.png)
+
+!!! example "Example"
+
+    The screenshot above demonstrates how to download the client configuration file using SCP.
+
 2. **SFTP (Windows or Linux)**:
    - Open an SFTP client (like WinSCP, FileZilla).
    - Connect to your server.
@@ -207,6 +219,13 @@ Scanning a QR code is often easier than manually transferring a `.conf` file to 
 - **iOS/Android**: Tap the “Activate” or “Connect” slider.
 ![activate_on_mac](assets/images/activate_on_mac.png)
 
+
+!!! tip "Tip"
+
+    The above screenshot is from macOS; other types of devices offer similar operations to activate the tunnel.
+
+
+
 ### Why This Step?
 This is how you **actually connect** the client to the server via the WireGuard VPN.
 
@@ -231,6 +250,12 @@ This is how you **actually connect** the client to the server via the WireGuard 
      latest handshake: <recent timestamp>
    ```
    ![check_linux_client_connection](assets/images/check_linux_client_connection.png)
+
+
+!!! example "Example"
+
+    The above screenshot shows a successful connection to the server through the tunnel.
+
 
 ### Why This Step?
 Ensures your client can reach the server (`10.8.0.1`), and that traffic is flowing through the VPN.

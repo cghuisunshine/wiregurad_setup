@@ -50,7 +50,10 @@ When you open WireGuard (on your server or client) for the first time, you’ll 
    net.ipv4.ip_forward = 1
    ```
    ![ip_forward_enable](assets/images/ip_forward_enable.png)
-    
+
+!!! success "Success"
+
+    Now IP Forwarding is enabled.
    
 **Why?**  
 Without IP forwarding, your VPN server can’t relay traffic from connected clients to other networks.
@@ -81,43 +84,11 @@ This ensures your private key is protected. `chmod 700` means only the **root us
    wg genkey | tee server-private.key | wg pubkey > server-public.key
    ```
    ![server_keys_generate](assets/images/server_keys_generate.png)
-   
-**Why?**  
-- **Private key**: Stays secret on your server.  
-- **Public key**: Shared with clients so they can encrypt data destined for this server.
 
----
 
-## 4. Create the Main Configuration File (`wg0.conf`)
+!!! example "Example"
 
-1. Open `/etc/wireguard/wg0.conf`:
-   ```bash
-   sudo nano /etc/wireguard/wg0.conf
-   ```
-2. Paste the following template, replacing `<server-private-key>` with the entire contents of `server-private.key`:
-
-   ```ini
-   [Interface]
-   # Server's VPN IP (choose a private subnet)
-   Address = 10.8.0.1/24
-
-   # Port for incoming WireGuard connections
-   ListenPort = 51820
-
-   # Your server's private key
-   PrivateKey = <server-private-key>
-
-   # (Optional) If supported by your clients, you can push DNS
-   # DNS = 1.1.1.1
-
-   # Example peer - fill in once you have a client's public key
-   #[Peer]
-   #PublicKey = <client-public-key>
-   #AllowedIPs = 10.8.0.2/32
-   ```
-3. Save and exit.
-   ![server_configuration](assets/images/server_configuarition.png)
-
+    This is an example for key generation process.
 
 
 **Why?**  
@@ -175,6 +146,12 @@ interface: wg0
 ```
 ![start_vpn_interface](assets/images/start_vpn_interface.png)
 
+
+!!! warning "Warning"
+
+    A private key should never be made publicly available.
+
+
 **Why?**  
 `wg-quick` applies the configuration file (`wg0.conf`) to create the `wg0` network interface.
 
@@ -206,6 +183,12 @@ No need to manually bring `wg0` up after every restart.
    ```
    You’ll see replies from the server’s own VPN IP (`10.8.0.1`).
    ![validate_vpn_interface](assets/images/validate_vpn_interface.png)
+
+
+!!! example "Example"
+
+    Above screenshot shows an example of succeessful replies from the server's own VPN IP.
+
 
 No clients are connected yet, but this ensures your server’s VPN interface is up and running.
 

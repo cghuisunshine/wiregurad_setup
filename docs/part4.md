@@ -135,7 +135,7 @@ If you created the client `.conf` file on the server, you’ll need to **downloa
 
 ---
 
-## 8. Verify the Connection
+## 8. Verify the Connection(on Linux)
 
 Once your client tunnel is **active**:
 

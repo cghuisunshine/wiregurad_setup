@@ -88,6 +88,7 @@ AllowedIPs = 0.0.0.0/0
 # Keeps NAT mappings alive
 PersistentKeepalive = 25
 ```
+![client_configuration_file](assets/images/client_configuration_file.png)
 
 ### Why This Step?
 Each client needs its own `.conf` file specifying:
@@ -204,6 +205,7 @@ Scanning a QR code is often easier than manually transferring a `.conf` file to 
 - **Windows/macOS**: Toggle the tunnel to **ON** or **Activate**.
 - **Linux**: `sudo wg-quick up /etc/wireguard/client1.conf`
 - **iOS/Android**: Tap the “Activate” or “Connect” slider.
+![activate_on_mac](assets/images/activate_on_mac.png)
 
 ### Why This Step?
 This is how you **actually connect** the client to the server via the WireGuard VPN.
@@ -228,13 +230,14 @@ This is how you **actually connect** the client to the server via the WireGuard 
      endpoint: <client's IP>:<port>
      latest handshake: <recent timestamp>
    ```
+   ![check_linux_client_connection](assets/images/check_linux_client_connection.png)
 
 ### Why This Step?
 Ensures your client can reach the server (`10.8.0.1`), and that traffic is flowing through the VPN.
 
 ---
 
-## Step 13: Check Logs or Update On-The-Fly
+## Step 13: Check Logs or Update On-The-Fly (Optional)
 
 - **View logs**:
   ```bash

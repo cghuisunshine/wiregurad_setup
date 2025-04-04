@@ -49,7 +49,9 @@ When you open WireGuard (on your server or client) for the first time, you’ll 
    ```
    net.ipv4.ip_forward = 1
    ```
-
+   ![ip_forward_enable](assets/images/ip_forward_enable.png)
+    
+   
 **Why?**  
 Without IP forwarding, your VPN server can’t relay traffic from connected clients to other networks.
 
@@ -78,6 +80,7 @@ This ensures your private key is protected. `chmod 700` means only the **root us
    ```bash
    wg genkey | tee server-private.key | wg pubkey > server-public.key
    ```
+   ![server_keys_generate](assets/images/server_keys_generate.png)
    
 **Why?**  
 - **Private key**: Stays secret on your server.  
@@ -113,6 +116,9 @@ This ensures your private key is protected. `chmod 700` means only the **root us
    #AllowedIPs = 10.8.0.2/32
    ```
 3. Save and exit.
+   ![server_configuration](assets/images/server_configuarition.png)
+
+
 
 **Why?**  
 `wg0.conf` tells WireGuard how to configure the VPN interface (`wg0`). The `[Interface]` section is for the **server**; each `[Peer]` section defines a **client**.
@@ -167,6 +173,7 @@ interface: wg0
   private key: (hidden)
   listening port: 51820
 ```
+![start_vpn_interface](assets/images/start_vpn_interface.png)
 
 **Why?**  
 `wg-quick` applies the configuration file (`wg0.conf`) to create the `wg0` network interface.
@@ -198,6 +205,7 @@ No need to manually bring `wg0` up after every restart.
    ping -c 3 10.8.0.1
    ```
    You’ll see replies from the server’s own VPN IP (`10.8.0.1`).
+   ![validate_vpn_interface](assets/images/validate_vpn_interface.png)
 
 No clients are connected yet, but this ensures your server’s VPN interface is up and running.
 

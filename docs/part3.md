@@ -202,6 +202,14 @@ sudo apt-get install qrencode
 cd /etc/wireguard/keys/clients
 qrencode -t ansiutf8 < client1.conf
 ```
+
+![generate_qr_code](assets/images/generate_qr_code.png)
+
+
+!!! example "Example"
+
+    The above screenshot shows a successful an example QR code generation process.
+
 Then in the WireGuard mobile app:
 1. Tap **Add**.
 2. Choose **Scan from QR Code**.

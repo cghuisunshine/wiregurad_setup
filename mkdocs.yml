@@ -19,8 +19,8 @@ theme:
       toggle:
         icon: material/weather-sunny
         name: Dark mode
-      primary: deep purple
-      accent: yellow
+      primary: green
+      accent: deep purple
 
     # Light Mode
     - media: "(prefers-color-scheme: light)"
@@ -28,20 +28,16 @@ theme:
       toggle:
         icon: material/weather-night
         name: Light mode
-      primary: deep orange
-      accent: blue
-# nav:
-#   - Home: index.md
-#   - Introduction to Git: set-1-intro-git.md
-#   - Installation:
-#       - Windows: set-2a-windows.md
-#       - macOS: set-2b-macOS.md
-#       - Linux: set-2c-linux.md
-#   - Basic Git Commands: set-3-basic-git-commands.md
-#   - Introduction to GitHub: set-4-intro-github.md
-#   - GitHub Setup: set-5-basic-github.md
-#   - Troubleshooting: troubleshooting.md
-#   - Glossary: glossary.md
+      primary: blue
+      accent: deep orange
+nav:
+  - Home: index.md
+  - Getting Started: part1.md
+  - Configuring the Server: part2.md
+  - Configuring Clients: part3.md
+  - Starting the VPN & Connecting: part4.md
+  - Troubleshooting: troubleshooting.md
+  - Glossary: glossary.md
 
 markdown_extensions:
   - attr_list

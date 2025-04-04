@@ -63,6 +63,6 @@ With WireGuard **available** on:
 - **Linux server** (ready to act as the VPN host), and  
 - **Client devices** (ready to connect),
 
-you can now proceed to **Part 2**, where you’ll set up the server’s WireGuard configuration (keys, interface settings, and firewall rules). Later, in **Part 3**, you’ll create and import client configurations to connect securely to the server.
+you can now proceed to [_Configuring the Server_](part2.md), where you’ll set up the server’s WireGuard configuration (keys, interface settings, and firewall rules). Later, in [_Configuring Clients_](part3.md), you’ll create and import client configurations to connect securely to the server.
 
 > **Note**: If you still need to **install** WireGuard on any platform, please consult the official installation instructions or your OS’s package manager documentation before proceeding.

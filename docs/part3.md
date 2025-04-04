@@ -270,4 +270,4 @@ By following these **13 steps**, you’ve:
 5. Activated the tunnel on your client.  
 6. Verified everything is working.
 
-**Next**: You can add more clients simply by repeating these steps (using a different `.conf` for each one). If everything’s working, you now have a fully functional WireGuard VPN setup!
+**Next**: You can add more clients simply by repeating these steps (using a different `.conf` for each one). If everything’s working, you now have a fully functional WireGuard VPN setup! Now you can move to [_Starting the VPN & Connecting_](part4.md).

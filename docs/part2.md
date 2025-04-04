@@ -218,4 +218,4 @@ No clients are connected yet, but this ensures your server’s VPN interface is 
 - **Use careful firewall rules** to avoid locking yourself out.  
 - **Check logs** if something isn’t working: `sudo journalctl -u wg-quick@wg0` on many distributions.
 
-Now you’re all set to **move on to Part 3** and set up your clients so they can connect to your newly configured VPN server!
+Now you’re all set to move on to [_Configuring Clients_](part3.md) and set up your clients so they can connect to your newly configured VPN server!

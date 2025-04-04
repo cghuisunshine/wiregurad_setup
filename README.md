@@ -1,4 +1,9 @@
-# WireGuard Setup Guide for Beginners
+# WireGuard Setup Guide  
+
+![WireGuard Logo](./docs/assets/wiregurad-logo.svg)  
+
+**A beginner-friendly guide to setting up a secure WireGuard VPN.**  
+
 
 ## Introduction
 **WireGuard** is a lightweight, high-performance VPN that uses modern cryptography to secure internet traffic. This guide walks beginners through setting up a WireGuard VPN server and connecting clients (e.g., laptops, phones).

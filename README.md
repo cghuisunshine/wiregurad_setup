@@ -8,9 +8,9 @@ WireGuard is a lightweight, high-performance VPN that uses modern cryptography t
 
 These are the sections included in the document:
 
-- Installing WireGuard on a Linux server  
+- Installing WireGuard  
 - Configuring the server  
-- Configuring clients (e.g., Windows, macOS, iOS, Android)  
+- Configuring clients   
 - Starting the VPN & connecting  
 
 # **Planning and Collaborating**
